@@ -29,11 +29,11 @@ def vector_to_maxtrix(vector,m_shape):
             i=i-1
     return output
 
-I = np.array([[1,2,3],[4,5,6]])
-F = np.array([[10,20],[30,40]])
+I = np.array([[0,0,0],[0,1,0],[0,0,0]])
+F = np.array([[1,2,3],[4,5,6],[7,8,9]])
 
-print(I.shape)
-print(F.shape)
+'''print(I.shape)
+print(F.shape)'''
 
 out_row = I.shape[0]+F.shape[0]-1
 out_column = I.shape[1]+F.shape[1]-1
@@ -51,8 +51,8 @@ for i in range(F.shape[0]-1,-1,-1):
     count+=1
     toeplitz.append(toep)
 
-print(toeplitz[0].shape[0]*count)
-print(toeplitz[0].shape[1]*I.shape[0])
+'''print(toeplitz[0].shape[0]*count)
+print(toeplitz[0].shape[1]*I.shape[0])'''
 
 dbl = np.zeros((toeplitz[0].shape[0]*count,toeplitz[0].shape[1]*I.shape[0]), dtype=int)
 
@@ -94,7 +94,7 @@ while(k<count):
         end_j = int(start_j+b_w)
         dbl[start_i:end_i,start_j:end_j] = toeplitz[i]'''
 
-print(dbl)
+'''print(dbl)'''
 
 row ,col = I.shape
 output = []
@@ -102,11 +102,11 @@ for i in range(row-1,-1,-1):
     for j in range(0,col):
         output.append(I[i][j])
 
-print(output)
+'''print(output)'''
 
 result_vector = np.matmul(dbl,output)
 
-print(result_vector)
+'''print(result_vector)'''
 
 result_matrix = vector_to_maxtrix(result_vector,(out_row,out_column))
         
@@ -115,6 +115,8 @@ print(result_matrix)
 res = signal.convolve2d(I,F)
 
 print(res)
+
+#visit https://github.com/sabertooth9/CSE-4128-Image-Processing-Lab/tree/1f10d06e6db40fb73f05774ac085d3fe5861e617 for support
 
 
 
