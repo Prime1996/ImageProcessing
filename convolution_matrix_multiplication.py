@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import signal
+import cv2
 
 def toeplitize(F,col):
     out = np.zeros((F.shape[0],col), dtype=int)
@@ -29,14 +30,44 @@ def vector_to_maxtrix(vector,m_shape):
             i=i-1
     return output
 
-I = np.array([[0,0,0],[0,1,0],[0,0,0]])
-F = np.array([[1,2,3],[4,5,6],[7,8,9]])
+def gauss_weighted_average(n):
+    out_x = []
+    out_y = []
+    val = 1
+    for i in range(n//2):
+        out_x.append(val)
+        out_y.append([val])
+        val = val * 2
+    out_x.append(val)
+    out_y.append([val])
+    for j in range(n//2):
+        val = val / 2
+        out_x.append(val)
+        out_y.append([val])
+    out_x = [out_x]
+    out = np.matmul(out_y, out_x)
+    return out
+
+#I = np.array([[0,0,0],[0,1,0],[0,0,0]])
+n = int(input("size of gaussian kernel = "))
+I = cv2.imread('lena.jpg',cv2.IMREAD_GRAYSCALE)
+I = cv2.resize(I, (200,200), interpolation = cv2.INTER_AREA)
+Fil = I.copy()
+F = gauss_weighted_average(n)
+sum_ = 0
+for i in F:
+    for j in i:
+        sum_=sum_+j
+
+cv2.imshow('input_image',I)
 
 '''print(I.shape)
 print(F.shape)'''
 
 out_row = I.shape[0]+F.shape[0]-1
 out_column = I.shape[1]+F.shape[1]-1
+
+Fil = cv2.resize(I, (out_row,out_column), interpolation = cv2.INTER_AREA)
 
 out = np.zeros((out_row,out_column), dtype=int)
 
@@ -112,12 +143,22 @@ result_matrix = vector_to_maxtrix(result_vector,(out_row,out_column))
         
 print(result_matrix)
 
-res = signal.convolve2d(I,F)
+for i in range(Fil.shape[0]):
+    for j in range(Fil.shape[1]):
+        Fil[i][j] = result_matrix[i][j] / sum_
 
-print(res)
+cv2.imshow("output", Fil)
+
+
+
+#res = signal.convolve2d(I,F)
+
+#print(res)
 
 #visit https://github.com/sabertooth9/CSE-4128-Image-Processing-Lab/tree/1f10d06e6db40fb73f05774ac085d3fe5861e617 for support
 
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 
 
